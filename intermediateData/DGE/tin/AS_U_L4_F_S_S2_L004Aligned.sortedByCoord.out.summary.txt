@@ -1,0 +1,2 @@
+Bam_file	TIN(mean)	TIN(median)	TIN(stdev)
+AS_U_L4_F_S_S2_L004Aligned.sortedByCoord.out.bam	70.8444260375264	74.5267119122973	17.235784590084883
