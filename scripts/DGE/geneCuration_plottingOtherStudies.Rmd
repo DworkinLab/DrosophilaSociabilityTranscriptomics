@@ -1,0 +1,372 @@
+---
+title: "geneCuration_otherPapers"
+output:
+  pdf_document: default
+  html_document: default
+date: '2023-05-11'
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, include = FALSE}
+library(tximport)
+library(readr)
+library(stringr)
+library(edgeR)
+library(limma)
+library(emmeans)
+library(parallel)
+library(ggplot2)
+library(ggpubr)
+library(gridExtra)
+library(TxDb.Dmelanogaster.UCSC.dm6.ensGene)
+library(ggrepel)
+library(data.table)
+library(DESeq2)
+library(cowplot)
+```
+
+```{r, include = FALSE}
+# Load anova
+sel_anova_df <- get(load(file = "/Users/arteen/Desktop/School/Projects/SociabilityRNA/Data/gauss_downVup/sel_anova_df.Rdata"))
+
+# P adjust and subset
+sel_anova_df$p.adj <- p.adjust(sel_anova_df$pval, method = 'BY')
+selection_anova_subset <- subset(sel_anova_df, sel_anova_df$p.adj < 0.05)
+dim(selection_anova_subset) # 327 genes
+
+
+
+selectionContrast_df <- get(load(file = "/Users/arteen/Desktop/School/Projects/SociabilityRNA/Data/gauss_downVup/selectionContrast_df.Rdata"))
+
+all_selection_genes <- selectionContrast_df[selectionContrast_df$gene %in% selection_anova_subset$gene, ]
+
+
+```
+
+
+```{r, include = FALSE}
+#To where quant folder is
+setwd("/Users/arteen/Desktop/School/Projects/SociabilityRNA/Data")
+quant_files <- file.path("quants", list.files("quants"), "quant.sf")
+samples <- quant_files
+samples <- substring(samples, 8, 26) #grab just sample name from the file name
+
+names(quant_files) <- samples
+
+library(TxDb.Dmelanogaster.UCSC.dm6.ensGene)
+txdb <- TxDb.Dmelanogaster.UCSC.dm6.ensGene
+k <- keys(txdb, keytype = "TXNAME")
+tx2gene <- AnnotationDbi::select(x = txdb, keys = k, "GENEID", "TXNAME")
+
+txi <- tximport(quant_files, type = "salmon", tx2gene = tx2gene)
+
+selection <- substring(samples, 4, 4)
+selection <- gsub("C", "control", selection)
+selection <- gsub("D", "down", selection)
+selection <- gsub("U", "up", selection)
+selection <- as.factor(selection)
+
+
+lineage <- substring(samples, 7, 7)
+lineage <- as.factor(lineage)
+
+sex <- substring(samples, 9, 9)
+sex <- gsub("F", "female", sex)
+sex <- gsub("M", "male", sex)
+sex <- as.factor(sex)
+
+expMatched <- substring(samples, 11, 11)
+expMatched <- gsub("S", "socArena", expMatched)
+expMatched <- gsub("V", "vial", expMatched)
+expMatched <- as.factor(expMatched)
+
+
+lane <- substring(samples, 19, 19)
+lane <- factor(lane)
+
+rna.design <- data.frame(sample = samples, 
+                         file = quant_files,
+                         selection = selection,
+                         sex = sex,
+                         expMatched = expMatched,
+                         lane = lane,
+                         lineage = lineage)
+
+dgeList <- DGEList(txi$counts)
+
+design <- model.matrix(~ lane + lineage + sex + expMatched +
+                         selection + sex:expMatched + selection:expMatched + 
+                         selection:sex,
+                       data = rna.design)
+
+keep2 <- filterByExpr(dgeList, design)
+dgeList <- dgeList[keep2, ]
+
+# normalize and run voom transformation
+dgeList <- calcNormFactors(dgeList)
+
+v <- voom(dgeList, design)
+voomCPM <- v$E
+sample_info <- rna.design[, -c(1:2)]
+```
+
+
+
+
+
+
+
+
+```{r, include = FALSE}
+
+geneDictionary <- read.delim(file = "/Users/arteen/Downloads/FlyGeneDictionary.txt")
+geneDictionary$FBgnID <- geneDictionary$validated_id
+
+
+selectionContrastEmmean_df <- get(load(file = "/Users/arteen/Desktop/School/Projects/SociabilityRNA/Data/gauss_downVup/selectionContrastEmmean_df.Rdata"))
+
+
+selectionContrastEmmean_df$selection <- relevel(as.factor(selectionContrastEmmean_df$selection), ref = "down")
+
+xAxis <- selectionContrastEmmean_df$selection
+
+xAxis <- gsub("down", 1, xAxis)
+xAxis <- gsub("control", 2, xAxis)
+xAxis <- gsub("up", 3, xAxis)
+xAxis <- as.numeric(xAxis)
+  
+selectionContrastEmmean_df$xAxis <- xAxis
+  
+sample_info_xAxis <- sample_info$selection
+
+sample_info_xAxis <- gsub("down", 1, sample_info_xAxis)
+sample_info_xAxis <- gsub("control", 2, sample_info_xAxis)
+sample_info_xAxis <- gsub("up", 3, sample_info_xAxis)
+
+sample_info_xAxis <- as.numeric(sample_info_xAxis)
+
+sample_info$xAxis <- sample_info_xAxis
+
+emmeanPlot_selection <- function(gene){
+  
+  # Gene dictionary
+  rowIndex <- which(geneDictionary$validated_id == gene)
+  geneName <- geneDictionary[rowIndex, 3]
+  if (length(geneName) == 0){ # if the gene name isnt in the dictionary
+  geneName <- gene
+  }
+  
+  # For jitter of points
+  cpmCounts <- c(voomCPM[gene,])
+  sample_infoCounts <- sample_info
+  sample_infoCounts$counts <- cpmCounts
+  
+  # For emmeans points
+  to_plot <- subset(selectionContrastEmmean_df, selectionContrastEmmean_df$geneID == gene)
+  
+  
+  pd = position_dodge(width = 0.3)
+  
+  # Actual plotting
+  ggplot() +
+    geom_point(data = to_plot, aes(x = xAxis, y = emmean), size = 1.5, position = pd) +
+    
+    geom_errorbar(data = to_plot, 
+                  aes(x = xAxis, y = emmean, ymin = lower.CL, ymax = upper.CL), width = 0.075, position = pd, alpha = 1) +
+    
+    geom_line(data = to_plot,
+              aes(x = xAxis, y = emmean), position = pd, alpha = 0.65) +
+    
+    geom_jitter(data = sample_infoCounts,
+                aes(x = xAxis, y = counts, color = lineage), alpha = 0.3, height = 0, width = 0.15, size = 0.6) +
+    
+    scale_x_continuous(name = "Selection", breaks = c(1.0, 2.0, 3.0),
+                       labels = c("Low", "Control", "High")) +
+    ylab(expression(log[2](CPM))) +
+    #ylab("") +
+    ggtitle(geneName) + 
+    theme_classic() +
+    #theme( plot.title = element_text(face = "italic"), axis.text = element_text(face = "bold")) 
+    theme(legend.position="none", plot.title = element_text(face = "italic"), axis.text = element_text(face = "bold")) 
+}
+```
+
+
+
+
+# Wang et al. 2022
+
+## Isolation disrupts social interactions and destabilizes brain development in bumblebees
+
+Did comparisons in isolated vs group raised bumblebees and isolated vs colony raised bees. Total of 115 DE genes in both comparisons and we find two genes that appear in our gene list for all genes DE (regardless of Low v High, High v control or Low v control) AND have a relevant phenotype in drosophila.
+
+Also both are in the isolated vs group raised DE genes list.
+```{r}
+# Wang et al. 2022
+
+wang_gene_curation <- read.csv(file = "/Users/arteen/Desktop/School/Projects/SociabilityRNA/SpreadsheetsAndData/geneCuration/WangEtAl_2022_geneComparison.csv", header = TRUE)
+
+
+wang_gene_curation_list_notRemoved <- wang_gene_curation$FBgnID
+
+wang_gene_curation_list <- subset(wang_gene_curation_list_notRemoved, wang_gene_curation_list_notRemoved != "NotFound")
+
+wangEtAl_subset <- all_selection_genes[all_selection_genes$geneID %in% wang_gene_curation_list, ]
+
+unique(wangEtAl_subset$geneID)
+## 2 genes come up
+
+wang_genes <- unique(wangEtAl_subset$geneID)
+
+
+for (g in wang_genes) {
+  p <- emmeanPlot_selection(g)
+  suppressWarnings(print(p))
+}
+```
+
+# Woodard et al. 2011
+
+They found 212 genes evolving significantly more rapidly in all eusocial lineages relative to non-eusocial lineages in their study.
+
+```{r}
+
+# Woodard et al. 2011
+
+# WoodardEtAl_2011_genes - dataset is from their test 1
+
+
+woodard_csv <- read.csv(file = "/Users/arteen/Desktop/School/Projects/SociabilityRNA/SpreadsheetsAndData/geneCuration/WoodardEtAl_2011_genes.csv", header = TRUE)
+
+woodard_gene_list_notRemoved <- woodard_csv$FBgnID
+
+woodard_gene_list <- subset(woodard_gene_list_notRemoved, woodard_gene_list_notRemoved != "No fly ortholog")
+
+
+woodard_gene_subset <- all_selection_genes[all_selection_genes$geneID %in% woodard_gene_list, ]
+unique(woodard_gene_subset$geneID) # 4 genes out of the 212 here
+
+woodard_genes <- unique(woodard_gene_subset$geneID)
+
+
+for (g in woodard_genes) {
+  p <- emmeanPlot_selection(g)
+  suppressWarnings(print(p))
+}
+
+
+
+```
+
+
+# Potn. Figure
+
+Figure would be wang and woodard genes together
+
+
+```{r}
+
+#wang_gene1 <- emmeanPlot_selection("FBgn0041713") # w axis
+#wang_gene2 <- emmeanPlot_selection("FBgn0262476") # w legend
+
+
+#woodard_gene1 <- emmeanPlot_selection("FBgn0000083")
+#woodard_gene2 <- emmeanPlot_selection("FBgn0000116") # w axis
+#woodard_gene3 <- emmeanPlot_selection("FBgn0003071")
+#woodard_gene4 <- emmeanPlot_selection("FBgn0039635") # w legend
+
+
+plot_grid(wang_gene1, wang_gene2, nrow = 1, ncol = 2)
+
+plot_grid(woodard_gene1, woodard_gene2,
+          woodard_gene3, woodard_gene4,
+          nrow = 2, ncol = 2)
+
+
+plot_grid(tmp1, tmp2)
+
+plot_grid(wang_gene1, 
+          woodard_gene1, woodard_gene2,
+          wang_gene2, woodard_gene3, woodard_gene4,
+          nrow = 2, ncol = 3,
+          labels = c("A)", "B)", "", "", "", ""))
+
+
+
+
+```
+
+
+
+
+
+# Shpigler et al. 2017
+
+Did two assays to assess whether bees were nurses, guards or unresponsive behaviour.
+
+1057 genes found to be differentially expressed when looking at the unresponsive bees. Not sure if here it is in both nurses vs unresponsive AND guards vs unresponsive OR just both nurses and guards vs unresponsive. I couldnt find their code so I dont know the comparisons they made.
+
+
+
+``` {r}
+
+# Shpigler et al. 2017
+
+shpigler_csv <- read.csv(file = "/Users/arteen/Desktop/School/Projects/SociabilityRNA/SpreadsheetsAndData/geneCuration/ShpiglerEtAl_2017_genes.csv", header = TRUE)
+
+shp_gene_list_notRemoved <- shpigler_csv$FBgnID
+
+shp_gene_list <- na.omit(shp_gene_list_notRemoved)
+
+
+shp_gene_subset <- all_selection_genes[all_selection_genes$geneID %in% shp_gene_list, ]
+unique(shp_gene_subset$geneID) # 14 genes out of ~1000 genes 
+
+shp_genes <- unique(shp_gene_subset$geneID)
+
+
+for (g in shp_genes) {
+  p <- emmeanPlot_selection(g)
+  suppressWarnings(print(p))
+}
+
+
+# shp_gene_1 <- emmeanPlot_selection("FBgn0001316")
+# shp_gene_2 <- emmeanPlot_selection("FBgn0003423")
+# shp_gene_3 <- emmeanPlot_selection("FBgn0014029")
+# shp_gene_4 <- emmeanPlot_selection("FBgn0029688")
+# shp_gene_5 <- emmeanPlot_selection("FBgn0030342")
+# shp_gene_6 <- emmeanPlot_selection("FBgn0031359")
+# shp_gene_7 <- emmeanPlot_selection("FBgn0032156")
+# shp_gene_8 <- emmeanPlot_selection("FBgn0032391")
+# shp_gene_9 <- emmeanPlot_selection("FBgn0038576")
+#shp_gene_10 <- emmeanPlot_selection("FBgn0038974") # no italics
+# shp_gene_11 <- emmeanPlot_selection("FBgn0044872")
+# shp_gene_12 <- emmeanPlot_selection("FBgn0260635")
+shp_gene_13 <- emmeanPlot_selection("FBgn0261683") # w axis 
+# shp_gene_14 <- emmeanPlot_selection("FBgn0262736")
+#legend <- cowplot::get_legend(wang_gene2) # legend
+
+
+
+plot_grid(shp_gene_1, shp_gene_2, shp_gene_3,
+          shp_gene_4, shp_gene_5, shp_gene_6,
+          shp_gene_7, shp_gene_8, shp_gene_9,
+          shp_gene_10, shp_gene_11, shp_gene_12,
+          shp_gene_13, shp_gene_14, legend,
+          nrow = 5, ncol = 3)
+
+
+
+
+
+``` 
+
+
+
