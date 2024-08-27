@@ -1,0 +1,14 @@
+{
+    "salmon_version": "1.4.0",
+    "index": "/home/arteen/projects/def-idworkin/arteen/SociabilityRNA/index/salmon/salmon_index",
+    "libType": "A",
+    "mates1": "/home/arteen/projects/def-idworkin/arteen/SociabilityRNA/trimmed_reads/AS_C_L1_F_V_S2_L004_R1_PE.fastq.gz",
+    "mates2": "/home/arteen/projects/def-idworkin/arteen/SociabilityRNA/trimmed_reads/AS_C_L1_F_V_S2_L004_R2_PE.fastq.gz",
+    "threads": "6",
+    "validateMappings": [],
+    "rangeFactorizationBins": "4",
+    "seqBias": [],
+    "gcBias": [],
+    "output": "/home/arteen/projects/def-idworkin/arteen/SociabilityRNA/salmon/AS_C_L1_F_V_S2_L004_quant",
+    "auxDir": "aux_info"
+}

@@ -1,0 +1,22 @@
+{
+    "read_files": "[ /home/arteen/projects/def-idworkin/arteen/SociabilityRNA/trimmed_reads/AS_U_L1_F_V_S1_L004_R1_PE.fastq.gz, /home/arteen/projects/def-idworkin/arteen/SociabilityRNA/trimmed_reads/AS_U_L1_F_V_S1_L004_R2_PE.fastq.gz]",
+    "expected_format": "ISR",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 39986779,
+    "num_assigned_fragments": 39986779,
+    "num_frags_with_concordant_consistent_mappings": 38925911,
+    "num_frags_with_inconsistent_or_orphan_mappings": 1066662,
+    "strand_mapping_bias": 0.000005189318543056174,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 202,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 38925911,
+    "SF": 506873,
+    "SR": 559587,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}

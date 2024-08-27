@@ -1,0 +1,74 @@
+[2022-01-01 08:01:35.119] [jointLog] [info] setting maxHashResizeThreads to 6
+[2022-01-01 08:01:35.119] [jointLog] [info] Fragment incompatibility prior below threshold.  Incompatible fragments will be ignored.
+[2022-01-01 08:01:35.119] [jointLog] [info] Usage of --validateMappings implies use of minScoreFraction. Since not explicitly specified, it is being set to 0.65
+[2022-01-01 08:01:35.120] [jointLog] [info] Setting consensusSlack to selective-alignment default of 0.35.
+[2022-01-01 08:01:35.120] [jointLog] [info] parsing read library format
+[2022-01-01 08:01:35.120] [jointLog] [info] There is 1 library.
+[2022-01-01 08:01:35.233] [jointLog] [info] Loading pufferfish index
+[2022-01-01 08:01:35.233] [jointLog] [info] Loading dense pufferfish index.
+[2022-01-01 08:01:36.201] [jointLog] [info] done
+[2022-01-01 08:01:36.201] [jointLog] [info] Index contained 31,744 targets
+[2022-01-01 08:01:36.705] [jointLog] [info] Number of decoys : 1,870
+[2022-01-01 08:01:36.705] [jointLog] [info] First decoy index : 29,874 
+[2022-01-01 08:01:37.084] [jointLog] [info] Automatically detected most likely library type as ISR
+
+[2022-01-01 08:03:54.865] [jointLog] [info] Thread saw mini-batch with a maximum of 1.02% zero probability fragments
+[2022-01-01 08:03:54.870] [jointLog] [info] Thread saw mini-batch with a maximum of 1.00% zero probability fragments
+[2022-01-01 08:03:54.897] [jointLog] [info] Thread saw mini-batch with a maximum of 1.06% zero probability fragments
+[2022-01-01 08:03:54.903] [jointLog] [info] Thread saw mini-batch with a maximum of 1.04% zero probability fragments
+[2022-01-01 08:03:54.911] [jointLog] [info] Thread saw mini-batch with a maximum of 1.00% zero probability fragments
+[2022-01-01 08:03:54.915] [jointLog] [info] Thread saw mini-batch with a maximum of 1.06% zero probability fragments
+[2022-01-01 08:03:54.974] [jointLog] [info] Computed 52,962 rich equivalence classes for further processing
+[2022-01-01 08:03:54.974] [jointLog] [info] Counted 36,644,566 total reads in the equivalence classes 
+[2022-01-01 08:03:54.979] [jointLog] [info] Number of mappings discarded because of alignment score : 6,417,458
+[2022-01-01 08:03:54.979] [jointLog] [info] Number of fragments entirely discarded because of alignment score : 1,160,397
+[2022-01-01 08:03:54.979] [jointLog] [info] Number of fragments discarded because they are best-mapped to decoys : 767,573
+[2022-01-01 08:03:54.979] [jointLog] [info] Number of fragments discarded because they have only dovetail (discordant) mappings to valid targets : 546,362
+[2022-01-01 08:03:54.979] [jointLog] [info] Mapping rate = 79.9545%
+
+[2022-01-01 08:03:54.979] [jointLog] [info] finished quantifyLibrary()
+[2022-01-01 08:03:54.982] [jointLog] [info] Starting optimizer
+[2022-01-01 08:03:55.109] [jointLog] [info] Marked 0 weighted equivalence classes as degenerate
+[2022-01-01 08:03:55.113] [jointLog] [info] iteration = 0 | max rel diff. = 2871.71
+[2022-01-01 08:03:55.152] [jointLog] [info] iteration 11, adjusting effective lengths to account for biases
+[2022-01-01 08:03:54.975] [fileLog] [info] 
+At end of round 0
+==================
+Observed 45831789 total fragments (45831789 in most recent round)
+
+[2022-01-01 08:04:19.033] [jointLog] [info] Computed expected counts (for bias correction)
+[2022-01-01 08:04:19.034] [jointLog] [info] processed bias for 0.0% of the transcripts
+[2022-01-01 08:04:21.265] [jointLog] [info] processed bias for 10.0% of the transcripts
+[2022-01-01 08:04:23.663] [jointLog] [info] processed bias for 20.0% of the transcripts
+[2022-01-01 08:04:25.841] [jointLog] [info] processed bias for 30.0% of the transcripts
+[2022-01-01 08:04:27.931] [jointLog] [info] processed bias for 40.0% of the transcripts
+[2022-01-01 08:04:30.469] [jointLog] [info] processed bias for 50.0% of the transcripts
+[2022-01-01 08:04:32.990] [jointLog] [info] processed bias for 60.0% of the transcripts
+[2022-01-01 08:04:35.889] [jointLog] [info] processed bias for 70.0% of the transcripts
+[2022-01-01 08:04:38.860] [jointLog] [info] processed bias for 80.0% of the transcripts
+[2022-01-01 08:04:41.576] [jointLog] [info] processed bias for 90.0% of the transcripts
+[2022-01-01 08:04:44.378] [jointLog] [info] processed bias for 100.0% of the transcripts
+[2022-01-01 08:04:44.517] [jointLog] [info] processed bias for 100.0% of the transcripts
+[2022-01-01 08:04:44.812] [jointLog] [info] iteration = 100 | max rel diff. = 13.7043
+[2022-01-01 08:04:45.124] [jointLog] [info] iteration = 200 | max rel diff. = 6.73497
+[2022-01-01 08:04:45.436] [jointLog] [info] iteration = 300 | max rel diff. = 7.95605
+[2022-01-01 08:04:45.747] [jointLog] [info] iteration = 400 | max rel diff. = 0.513097
+[2022-01-01 08:04:46.059] [jointLog] [info] iteration = 500 | max rel diff. = 0.401499
+[2022-01-01 08:04:46.370] [jointLog] [info] iteration = 600 | max rel diff. = 5.06531
+[2022-01-01 08:04:46.681] [jointLog] [info] iteration = 700 | max rel diff. = 1.67319
+[2022-01-01 08:04:46.992] [jointLog] [info] iteration = 800 | max rel diff. = 3.52827
+[2022-01-01 08:04:47.303] [jointLog] [info] iteration = 900 | max rel diff. = 1.56292
+[2022-01-01 08:04:47.615] [jointLog] [info] iteration = 1,000 | max rel diff. = 2.2802
+[2022-01-01 08:04:47.926] [jointLog] [info] iteration = 1,100 | max rel diff. = 0.095356
+[2022-01-01 08:04:48.237] [jointLog] [info] iteration = 1,200 | max rel diff. = 2.48676
+[2022-01-01 08:04:48.548] [jointLog] [info] iteration = 1,300 | max rel diff. = 0.0937336
+[2022-01-01 08:04:48.858] [jointLog] [info] iteration = 1,400 | max rel diff. = 0.0399751
+[2022-01-01 08:04:49.170] [jointLog] [info] iteration = 1,500 | max rel diff. = 0.0352505
+[2022-01-01 08:04:49.480] [jointLog] [info] iteration = 1,600 | max rel diff. = 0.0427113
+[2022-01-01 08:04:49.791] [jointLog] [info] iteration = 1,700 | max rel diff. = 0.193206
+[2022-01-01 08:04:50.102] [jointLog] [info] iteration = 1,800 | max rel diff. = 0.0165475
+[2022-01-01 08:04:50.413] [jointLog] [info] iteration = 1,900 | max rel diff. = 0.112448
+[2022-01-01 08:04:50.444] [jointLog] [info] iteration = 1,911 | max rel diff. = 0.00972139
+[2022-01-01 08:04:50.448] [jointLog] [info] Finished optimizer
+[2022-01-01 08:04:50.448] [jointLog] [info] writing output 
+
