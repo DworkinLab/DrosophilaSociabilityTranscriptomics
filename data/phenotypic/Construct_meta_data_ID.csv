@@ -1,0 +1,18 @@
+﻿stock_number,TestDates,ExperimentalBlock,VDRC_TRiP,Construct_ID,vector,genes,FBgn,predicted_effect_KD,insertion_location,insertion_chromosome,full_strain_genotype,gene_native_chromosome,isoforms_targeted_of,Notes
+55928,15/05/2023,A,TRiP,HMC04216,VALIUM20,Est-P_thoc6,FBgn0036263,increase,attP40,2,y1 sc v1; P{TRiP}attP40,3,,"targets multiple genes. thoc6,Est-P"
+55206,04/06/2023,B,TRiP,HMC03921,VALIUM20,thoc5,FBgn0034939,decrease,attP40,2,y1 sc v1; P{TRiP}attP40,2,1_1,
+31878,15/06/2023,C,TRiP,JF02153,VALIUM10,ppk28,FBgn0030795,increase,attP2,3,y1 v1; P{TRiP}attP2/TM3 Sb,X,,targets multiple genes. Also targets antisense RNA:CR44053
+61998,21/06/2023,D,TRiP,HMJ23624,VALIUM20,BaraB,FBgn0033353,increase,attP40,2,y1 v1; P{TRiP}attP40/CyO,2,1_1,
+58274,28/06/2023,E,TRiP,HMJ22357,VALIUM20,CG5418,FBgn0032436,increase,attP40,2,y1 v1; P{TRiP}attP40/CyO,2,1_1,
+27526,06/07/2023,F,TRiP,JF02676,VALIUM10,Sec5,FBgn0266670,decrease,attP2,3,y1 v1; P{TRiP}attP2,2,1_1,
+39052,13/07/2023,G,TRiP,HMS01972,VALIUM20,CG13197,FBgn0062449,decrease,attP2,3,y1 sc v1; P{TRiP}attP2/TM3 Sb,2,2_2,
+25725,21/09/2023,H,VDRC,10198,GD_P_element,CG31231,FBgn0051231,increase,3,3,w; P{GD}/Tm3 Sb,3,,"homozygous lethal insertion, may have off target effects"
+109827,25/09/2023,I,VDRC,109777,KK,CG32650,FBgn0052650,decrease,30B,2,y w[1118];P{attP y[+] w[3`]} ,X,1_1,
+105450,28/09/2023,J,VDRC,103323,KK,CG5810,FBgn0038866,increase,,2,y w[1118];P{attP y[+] w[3`]} ,3,1_1,
+108577,04/10/2023,K,VDRC,101369,KK,Netrin-A,FBgn0015773,increase,30B,2,y w[1118];P{attP y[+] w[3`]} ,X,3_,
+104329,09/11/2023,L,VDRC,107549,KK,DJ-1alpha,FBgn0033885,decrease,30B,2,y w[1118];P{attP y[+] w[3`]} ,2,1_1,
+330479,20/11/2023,M,VDRC,330479,shRNA,Ir94d,FBgn0259193,decrease,attP40,2,,3,1_1,"yes, these VDRC use attP40"
+107788,30/03/2024,N,VDRC,109140,KK,Dgat2,FBgn0033215,increase,30B,2,y w[1118];P{attP y[+] w[3`]} ,2,1_1,
+106708,11/04/2024,O,VDRC,103530,KK,CG11634,FBgn0032968,,30B,2,y w[1118];P{attP y[+] w[3`]} ,2,2_,"initially identified as an RNAi for Ir68A, this has been updated by VDRC"
+110198,18/04/2024,P,VDRC,102478,KK,Nmdmc,FBgn0010222,increase,30B,2,y w[1118];P{attP y[+] w[3`]} ,3,3_,
+101603,13/11/2023,Q,VDRC,104128,KK,CG8329_SP170,FBgn0036022,decrease,30B,2,y w[1118];P{attP y[+] w[3`]} ,3,1_1,only hits one gene but it is identified as both SP170 and the CG
