@@ -1,5 +1,5 @@
 ---
-title: "Analysis of Sociability from RNAi knockdown experiments performed by Dania Daanish"
+title: "Analysis of Sociability of the RNAi knockdown experiments performed by Dania Daanish"
 author: "Ian Dworkin"
 date: "`r format(Sys.time(),'%d %b %Y')`"
 output:
@@ -43,7 +43,7 @@ theme_bw_alt <- function (base_size = 11, base_family = "", base_line_size = bas
 {
     theme_grey(base_size = base_size, base_family = base_family, 
         base_line_size = base_line_size, base_rect_size = base_rect_size) %+replace% 
-        theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
+        theme(axis.text.x = element_text(angle = 45, vjust = 0.95, hjust = 1, face = "italic", size = 12),
               legend.position = "top",
           panel.background = element_rect(fill = "white", colour = NA), 
           panel.border = element_rect(fill = NA, colour = "grey20"), 
@@ -52,6 +52,11 @@ theme_bw_alt <- function (base_size = 11, base_family = "", base_line_size = bas
               strip.background = element_rect(fill = "grey85", colour = "grey20"), 
           complete = TRUE)
 }
+```
+
+
+```{r}
+axis.text.x = element_text(vjust = -12)
 ```
 
 or 
@@ -88,7 +93,7 @@ The sociability score for each assay is the *coefficient of dispersion* $\frac{\
 ### read in data
 
 ```{r}
-sociability_data_raw <- read.csv("../../data/phenotypic/DD_SociabilityScores_AllCrosses_ID_formatted.csv", header = TRUE)
+sociability_data_raw <- read.csv("../data/DD_SociabilityScores_AllCrosses_ID_formatted.csv", header = TRUE)
 
 head(sociability_data_raw)
 str(sociability_data_raw)
@@ -99,7 +104,7 @@ with(sociability_data_raw,
 
 read in meta-data
 ```{r}
-sociability_meta_data <- read.csv("../../data/phenotypic/Construct_meta_data_ID.csv", header = TRUE)
+sociability_meta_data <- read.csv("../data/Construct_meta_data_ID.csv", header = TRUE)
 
 str(sociability_meta_data)
 ```
@@ -519,8 +524,13 @@ treatment_contrasts_mod1_log_sex_averaged_df$genes <- pred_dat$genes
 ```
 
 
+
+### Version of plot (figure 7) for manuscript.
+March 2025 - The AE asked me to remove "-Control" from the labels on the X axis. I made some other changes as well to the theme (top of script) to improve readability. 
+
+
 ```{r}
-ggplot(treatment_contrasts_mod1_log_sex_averaged_df, aes(y = estimate, x = fct_reorder(contrast, estimate, .desc = FALSE))) + 
+ggplot(treatment_contrasts_mod1_log_sex_averaged_df, aes(y = estimate, x = fct_reorder(genes, estimate, .desc = FALSE))) + 
   geom_pointrange(aes(ymin = asymp.LCL, ymax = asymp.UCL, col = predicted_effect_KD)) +
   scale_color_grey(start = 0, end = 0.55) +
   geom_hline(yintercept = 0, lty = 2, alpha = 0.5) +
