@@ -6,6 +6,9 @@ Torabi-Marashi A, Daanish D, Scott AM, Dukas R & Dworkin I. 2025. The genetic ba
 
 This repository contains data and scripts to perform the analyses in the paper.
 
+A static version of the data and scripts is available on figshare
+
+https://doi.org/10.6084/m9.figshare.29657138.v1
 
 
 ## Directory Structure
